@@ -1,6 +1,8 @@
-Revision history for Perl extension Time::Piece::MySQL.
+0.02  Jun 11, 2002
 
-0.01  Mon Jun 10 12:51:54 2002
-	- original version; created by h2xs 1.21 with options
-		-AX -n Time::Piece::MySQL
+- Forgot to fill in README.  Doh!
+
+0.01  Jun 11, 2002
+
+- First release
 
