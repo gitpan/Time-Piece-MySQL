@@ -4,7 +4,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Time::Piece;
 
@@ -24,11 +24,9 @@ BEGIN
 sub mysql_date
 {
     my $self = shift;
-
     my $old_sep = $self->date_separator('-');
     my $ymd = $self->ymd;
     $self->date_separator($old_sep);
-
     return $ymd;
 }
 
@@ -38,34 +36,26 @@ sub mysql_time
     my $old_sep = $self->time_separator(':');
     my $hms = $self->hms;
     $self->time_separator($old_sep);
-
     return $hms;
 }
 
 sub mysql_datetime
 {
     my $self = shift;
-
-
     return join ' ', $self->mysql_date, $self->mysql_time;
 }
 
 sub from_mysql_date
 {
     my $class = shift;
-
     return $class->strptime( shift, '%Y-%m-%d' );
 }
 
-# intentionally don't use strptime, which appears to be buggy
 sub from_mysql_datetime
 {
     my $class = shift;
-
     my $time = $class->strptime( shift, '%Y-%m-%d %H:%M:%S' );
-
     $time -= ONE_HOUR if HAS_DST_BUG && $time->isdst;
-
     return $time;
 }
 
@@ -81,16 +71,18 @@ my %ts =
       2  => '%Y',
     );
 
+sub mysql_timestamp {
+	my $self = shift;
+	return $self->strftime('%Y%m%d%H%M%S');
+}
+
 sub from_mysql_timestamp
 {
     my $class = shift;
     my $timestamp = shift;
-
     my $length = length $timestamp;
-
     my $format = $ts{$length}
 	or return;
-
     if ( $length ne 14 &&
 	 $length ne 8 )
     {
@@ -103,7 +95,6 @@ sub from_mysql_timestamp
 	    $timestamp = "19$timestamp";
 	}
     }
-
     return Time::Piece->strptime( $timestamp, $format );
 }
 
@@ -131,7 +122,7 @@ Time::Piece::MySQL - Adds MySQL-specific methods to Time::Piece
 
 =head1 DESCRIPTION
 
-Using this module instead of, or in addition to C<Time::PIece> adds a
+Using this module instead of, or in addition to C<Time::Piece> adds a
 few MySQL-specific date/time methods to C<Time::Piece> objects.
 
 =head1 OBJECT METHODS
@@ -144,11 +135,15 @@ few MySQL-specific date/time methods to C<Time::Piece> objects.
 
 =item * mysql_datetime
 
+=item * mysql_timestamp
+
 Returns the date and/or time in a format suitable for use by MySQL.
 
 =back
 
 =head1 CONSTRUCTORS
+
+=over 4
 
 =item * from_mysql_date
 
@@ -158,6 +153,8 @@ Returns the date and/or time in a format suitable for use by MySQL.
 
 Given a date, date/time, or timestamp as returned from MySQL, these
 constructors return a new Time::Piece object.
+
+=back
 
 =head1 BUGS
 
@@ -169,10 +166,21 @@ unpredictable results.
 
 =head1 AUTHOR
 
-Dave Rolsky, <autarch@urth.org>
+Original author: Dave Rolsky <autarch@urth.org>
+
+Current maintainer: Marty Pauley <marty+perl@kasei.com>
+
+=head1 COPYRIGHT
+
+(c) 2002 Dave Rolsky
+
+(c) 2003 Marty Pauley
+
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-Time::Piece
+L<Time::Piece>
 
 =cut

@@ -1,89 +1,95 @@
 use strict;
 
-use Test;
-BEGIN { plan tests => 39 };
+use Test::More tests => 46;
 use Time::Piece::MySQL;
-ok(1); # If we made it this far, we're ok.
+ok(1, "loaded");
 
 my $lt = localtime;
-ok( UNIVERSAL::isa( $lt, 'Time::Piece' ) );
+isa_ok( $lt, 'Time::Piece' );
 
 my $gmt = gmtime;
-ok( UNIVERSAL::isa( $gmt, 'Time::Piece' ) );
+isa_ok( $gmt, 'Time::Piece' );
 
 for my $t ( $lt, $gmt )
 {
-    ok( $t->mysql_date, $t->ymd );
+    is( $t->mysql_date, $t->ymd );
 
-    ok( $t->mysql_time, $t->hms );
+    is( $t->mysql_time, $t->hms );
 
     my $mdt = join ' ', $t->ymd, $t->hms;
-    ok( $t->mysql_datetime, $mdt );
+    is( $t->mysql_datetime, $mdt );
 }
 
 # doesn't work right now because of some weirdness with strptime that
 # Matt S will fix (I hope) some day.
 my $t = Time::Piece->from_mysql_datetime( $lt->mysql_datetime );
 
-ok( UNIVERSAL::isa( $t, 'Time::Piece' ) );
+isa_ok( $t, 'Time::Piece' );
 
-ok( $t->mysql_datetime, $lt->mysql_datetime );
+is( $t->mysql_datetime, $lt->mysql_datetime );
 
 my $t2 = Time::Piece->from_mysql_date( $lt->mysql_date );
-ok( UNIVERSAL::isa( $t2, 'Time::Piece' ) );
+isa_ok( $t2, 'Time::Piece' );
 
-ok( $t2->ymd, $lt->ymd );
+is( $t2->ymd, $lt->ymd );
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(70);
-    ok( $t->year, 1970 );
+    my $t = Time::Piece->from_mysql_timestamp('70');
+    is( $t->year, 1970 );
+    is( $t->mysql_timestamp, '19700101000000' );
 }
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(1202);
-    ok( $t->year, 2012 );
-    ok( $t->mon, 2 );
+    my $t = Time::Piece->from_mysql_timestamp('1202');
+    is( $t->year, 2012 );
+    is( $t->mon, 2 );
+    is( $t->mysql_timestamp, '20120201000000' );
 }
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(120211);
-    ok( $t->year, 2012 );
-    ok( $t->mon, 2 );
-    ok( $t->day_of_month, 11 );
+    my $t = Time::Piece->from_mysql_timestamp('120211');
+    is( $t->year, 2012 );
+    is( $t->mon, 2 );
+    is( $t->day_of_month, 11 );
+    is( $t->mysql_timestamp, '20120211000000' );
 }
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(20120211);
-    ok( $t->year, 2012 );
-    ok( $t->mon, 2 );
-    ok( $t->day_of_month, 11 );
+    my $t = Time::Piece->from_mysql_timestamp('20120211');
+    is( $t->year, 2012 );
+    is( $t->mon, 2 );
+    is( $t->day_of_month, 11 );
+    is( $t->mysql_timestamp, '20120211000000' );
 }
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(1202110545);
-    ok( $t->year, 2012 );
-    ok( $t->mon, 2 );
-    ok( $t->day_of_month, 11 );
-    ok( $t->hour, 5 );
-    ok( $t->min, 45 );
+    my $t = Time::Piece->from_mysql_timestamp('1202110545');
+    is( $t->year, 2012 );
+    is( $t->mon, 2 );
+    is( $t->day_of_month, 11 );
+    is( $t->hour, 5 );
+    is( $t->min, 45 );
+    is( $t->mysql_timestamp, '20120211054500' );
 }
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(120211054537);
-    ok( $t->year, 2012 );
-    ok( $t->mon, 2 );
-    ok( $t->day_of_month, 11 );
-    ok( $t->hour, 5 );
-    ok( $t->min, 45 );
-    ok( $t->sec, 37 );
+    my $t = Time::Piece->from_mysql_timestamp('120211054537');
+    is( $t->year, 2012 );
+    is( $t->mon, 2 );
+    is( $t->day_of_month, 11 );
+    is( $t->hour, 5 );
+    is( $t->min, 45 );
+    is( $t->sec, 37 );
+    is( $t->mysql_timestamp, '20120211054537' );
 }
 
 {
-    my $t = Time::Piece->from_mysql_timestamp(20120211054537);
-    ok( $t->year, 2012 );
-    ok( $t->mon, 2 );
-    ok( $t->day_of_month, 11 );
-    ok( $t->hour, 5 );
-    ok( $t->min, 45 );
-    ok( $t->sec, 37 );
+    my $t = Time::Piece->from_mysql_timestamp('20120211054537');
+    is( $t->year, 2012 );
+    is( $t->mon, 2 );
+    is( $t->day_of_month, 11 );
+    is( $t->hour, 5 );
+    is( $t->min, 45 );
+    is( $t->sec, 37 );
+    is( $t->mysql_timestamp, '20120211054537' );
 }

@@ -1,5 +1,5 @@
-Time/Piece/MySQL version 0.01
-=============================
+Time::Piece::MySQL
+==================
 
 Time::Piece::MySQL, when used, adds several MySQL-specific methods to
 the Time::Piece class.
@@ -24,5 +24,3 @@ All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-
-
