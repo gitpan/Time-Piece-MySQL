@@ -1,8 +1,0 @@
-Changes
-Makefile.PL
-MANIFEST
-lib/Time/Piece/MySQL.pm
-README
-t/01-basic.t
-t/datetime.t
-t/timestamp.t

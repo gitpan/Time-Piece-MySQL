@@ -1,3 +1,7 @@
+0.05  Jul 21, 2004
+
+- It seems that 0.04 was incorrectly bundled onto CPAN after my Solaris testing.
+
 0.04  Feb 02, 2004
 
 - fixed the test failure on sun4-solaris (and probably others)

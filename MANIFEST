@@ -1,19 +1,9 @@
 Changes
 MANIFEST
-MANIFEST.bak
-Makefile
 Makefile.PL
 README
-Time-Piece-MySQL-0.04/MANIFEST
-Time-Piece-MySQL-0.04/README
-blib/arch/auto/Time/Piece/MySQL/.exists
-blib/lib/Time/Piece/.exists
-blib/lib/Time/Piece/MySQL.pm
-blib/lib/auto/Time/Piece/MySQL/.exists
-blib/man3/.exists
-blib/man3/Time::Piece::MySQL.3
 lib/Time/Piece/MySQL.pm
-pm_to_blib
 t/basic.t
 t/datetime.t
 t/timestamp.t
+META.yml                                 Module meta-data (added by MakeMaker)

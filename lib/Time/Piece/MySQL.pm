@@ -1,7 +1,7 @@
 package Time::Piece::MySQL;
 use strict;
 use vars qw($VERSION);
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 use Time::Piece;
 
