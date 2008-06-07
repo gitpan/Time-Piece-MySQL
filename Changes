@@ -1,3 +1,9 @@
+0.06  2008-06-07
+
+- added spaces to the strftime formats, as required by POSIX.  Thanks to Brandt
+  Kurowski for highlighting the problem. Fixes bug #32580.
+- support newer MySQL formats. Fixes bug #23840.
+
 0.05  Jul 21, 2004
 
 - It seems that 0.04 was incorrectly bundled onto CPAN after my Solaris testing.

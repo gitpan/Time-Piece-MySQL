@@ -1,7 +1,7 @@
 package Time::Piece::MySQL;
 use strict;
 use vars qw($VERSION);
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use Time::Piece;
 
@@ -13,8 +13,9 @@ use Time::Seconds;
 
 BEGIN
 {
+    # I don't know what this dst bug is, but the code was here...
     my $has_dst_bug =
-	Time::Piece->strptime( '20000601120000', '%Y%m%d%H%M%S' )->hour != 12;
+	Time::Piece->strptime( '20000601120000', '%Y %m %d %H %M %S' )->hour != 12;
     sub HAS_DST_BUG () { $has_dst_bug }
 }
 
@@ -69,6 +70,7 @@ sub from_mysql_timestamp {
     # From MySQL version 4.1, timestamps are returned as datetime strings
     my ($class, $timestamp) = @_;
     my $length = length $timestamp;
+    return from_mysql_datetime(@_) if $length == 19;
     # most timestamps have 2-digit years, except 8 and 14 char ones
     if ( $length != 14 && $length != 8 ) {
         $timestamp = (substr($timestamp, 0, 2) < 70 ? "20" : "19")
@@ -77,7 +79,7 @@ sub from_mysql_timestamp {
     # now we need to extend this to 14 chars to make sure we get
     # consistent cross-platform results
     $timestamp .= substr("19700101000000", length $timestamp);
-    my $time = eval {$class->strptime( $timestamp, '%Y%m%d%H%M%S')};
+    my $time = eval {$class->strptime( $timestamp, '%Y %m %d %H %M %S')};
     return $time;
 }
 
